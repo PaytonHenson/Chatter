@@ -99,11 +99,18 @@ public class ClientGUI extends JFrame implements ActionListener {
             return;
         }
 
-        // ok it is coming from the JTextField
+        // ok it is coming from the JTextField (REFACTOR)
         if(connected) {
             // just have to send the message
-            client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, tf.getText()));				
-            tf.setText("");
+            String check = tf.getText().split(" ")[0];
+            if (check.equals("\\nick")) {
+                client.sendMessage(new ChatMessage(ChatMessage.CHANGENAME, tf.getText().split(" ")[1]));
+                tf.setText("");
+            }
+            else {
+                client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, tf.getText()));				
+                tf.setText("");
+            }
             return;
         }
 
