@@ -10,13 +10,10 @@ import java.awt.event.*;
  */
 public class ClientGUI extends JFrame implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
-    // will first hold "Username:", later on "Enter message"
     private final JLabel label;
-    // to hold the Username and later on the messages
+    // to hold  messages
     private final JTextField tf;
-    // to Logout and get the list of the users
-    private final JButton logout;
+    // to get the list of the users
     private final JButton whoIsIn;
     // for the chat room
     private final JTextArea ta;
@@ -36,9 +33,9 @@ public class ClientGUI extends JFrame implements ActionListener {
         JPanel northPanel = new JPanel(new GridLayout(2,1));
 
         // the Label and the TextField
-        label = new JLabel("Enter your username below", SwingConstants.CENTER);
+        label = new JLabel("Enter your message below", SwingConstants.CENTER);
         northPanel.add(label);
-        tf = new JTextField("Anonymous");
+        tf = new JTextField("");
         tf.setBackground(Color.WHITE);
         northPanel.add(tf);
         add(northPanel, BorderLayout.NORTH);
@@ -50,15 +47,10 @@ public class ClientGUI extends JFrame implements ActionListener {
         ta.setEditable(false);
         add(centerPanel, BorderLayout.CENTER);
 
-        logout = new JButton("Logout");
-        logout.addActionListener(this);
-        logout.setEnabled(false);		// you have to login before being able to logout
         whoIsIn = new JButton("Who is in");
         whoIsIn.addActionListener(this);
-        whoIsIn.setEnabled(false);		// you have to login before being able to Who is in
 
         JPanel southPanel = new JPanel();
-        southPanel.add(logout);
         southPanel.add(whoIsIn);
         add(southPanel, BorderLayout.SOUTH);
 
@@ -67,18 +59,13 @@ public class ClientGUI extends JFrame implements ActionListener {
         setVisible(true);
         tf.requestFocus();
         
-        //PPH
         // try creating a new Client with GUI
         client = new Client(host, port, defaultUsername, this);
         // test if we can start the Client
         if(!client.start()) 
                 return;
-        tf.setText("");
-        label.setText("Enter your message below");
         connected = true;
 
-        // enable the 2 buttons
-        logout.setEnabled(true);
         whoIsIn.setEnabled(true);
         // Action listener for when the user enter a message
         tf.addActionListener(this);
@@ -90,10 +77,8 @@ public class ClientGUI extends JFrame implements ActionListener {
         ta.append(str);
         ta.setCaretPosition(ta.getText().length() - 1);
     }
-    // called by the GUI is the connection failed
-    // we reset our buttons, label, textfield
+    // REFACTOR
     void connectionFailed() {
-        logout.setEnabled(false);
         whoIsIn.setEnabled(false);
         label.setText("Enter your username below");
         tf.setText("Anonymous");
@@ -108,11 +93,6 @@ public class ClientGUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
-        // if it is the Logout button
-        if(o == logout) {
-            client.sendMessage(new ChatMessage(ChatMessage.LOGOUT, ""));
-            return;
-        }
         // if it the who is in button
         if(o == whoIsIn) {
             client.sendMessage(new ChatMessage(ChatMessage.WHOISIN, ""));				
