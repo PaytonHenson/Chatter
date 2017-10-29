@@ -208,6 +208,9 @@ public class Server {
                     case ChatMessage.MESSAGE:
                         broadcast(username + ": " + message);
                         break;
+                    case ChatMessage.CHANGENAME:
+                        username = message;
+                        break;
                     case ChatMessage.LOGOUT:
                         display(username + " disconnected with a LOGOUT message.");
                         keepGoing = false;

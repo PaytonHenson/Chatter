@@ -111,10 +111,10 @@ public class Client  {
             cg.connectionFailed();
 
     }
+    
 
     /*
      * a class that waits for the message from the server and append them to the JTextArea
-     
      */
     class ListenFromServer extends Thread {
 
