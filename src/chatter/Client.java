@@ -135,5 +135,31 @@ public class Client  {
             }
         }
     }
+    
+    // to start the whole thing the server
+    public static void main(String[] args) {
+        
+        String hostname;
+        int portNumber;
+        
+        switch(args.length) {
+            case 2: 
+                try {
+                    portNumber = Integer.parseInt(args[1]);
+                    hostname = args[0];
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid port number.");
+                    System.out.println("Usage is: > java Client [hostname] [portNumber]");
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Usage is: > java Client [hostname] [portNumber]");
+                return;
+        }
+        
+        new ClientGUI(hostname, portNumber);
+    }
 }
 
